@@ -4,7 +4,8 @@ const restricted = require("../auth/auth-mw.js");
 
 router.get("/", restricted, async (req, res) => {
   try {
-    const users = await Users.find();
+    const { role } = req.decodedToken;
+    const users = await Users.find().where("department", "=", role);
     res.status(200).json(users);
   } catch (err) {
     console.log("users get all error", err);
